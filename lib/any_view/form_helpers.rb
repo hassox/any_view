@@ -6,7 +6,7 @@ module AnyView
       # form_for @user, '/register', :id => 'register' do |f| ... end
       def form_for(object, url, settings={}, &block)
         builder_class = configured_form_builder_class(settings[:builder])
-        form_html = capture_html(builder_class.new(self, object), &block)
+        form_html = capture_content(builder_class.new(self, object), &block)
         form_tag(url, settings) { form_html }
       end
 
@@ -16,7 +16,7 @@ module AnyView
       # fields_for :assignment do |assigment| ... end
       def fields_for(object, settings={}, &block)
         builder_class = configured_form_builder_class(settings[:builder])
-        fields_html = capture_html(builder_class.new(self, object), &block)
+        fields_html = capture_content(builder_class.new(self, object), &block)
         concat_content fields_html
       end
 
@@ -24,8 +24,15 @@ module AnyView
       # form_tag '/register' do ... end
       def form_tag(url, options={}, &block)
         options.reverse_merge!(:method => 'post', :action => url)
-        options[:enctype] = "multipart/form-data" if options.delete(:multipart)
-        inner_form_html = hidden_form_method_field(options[:method]) + capture_html(&block)
+
+        @_multi_enc_type = options.delete(:multipart)
+        fake_method = hidden_form_method_field(options[:method])
+        real_method = real_method_for_fake(options[:method])
+        options[:method] = real_method
+        inner_form_html = fake_method.to_s + capture_content(&block)
+
+        options[:enctype] = "multipart/form-data" if @_multi_enc_type
+        @_multi_enc_type = nil
         concat_content content_tag('form', inner_form_html, options)
       end
 
@@ -36,7 +43,7 @@ module AnyView
         options = args.extract_options!
         legend_text = args[0].is_a?(String) ? args.first : nil
         legend_html = legend_text.blank? ? '' : content_tag(:legend, legend_text)
-        field_set_content = legend_html + capture_html(&block)
+        field_set_content = legend_html + capture_content(&block)
         concat_content content_tag('fieldset', field_set_content, options)
       end
 
@@ -56,10 +63,10 @@ module AnyView
       # label_tag :username, :class => 'long-label'
       # label_tag :username, :class => 'long-label' do ... end
       def label_tag(name, options={}, &block)
-        options.reverse_merge!(:caption => name.to_s.titleize, :for => name)
+        options.reverse_merge!(:caption => name.to_s.gsub(/\b('?[a-z])/){ $1.upcase}, :for => name)
         caption_text = options.delete(:caption) + ": "
         if block_given? # label with inner content
-          label_content = caption_text + capture_html(&block)
+          label_content = caption_text + capture_content(&block)
           concat_content(content_tag(:label, label_content, options))
         else # regular label
           content_tag(:label, caption_text, options)
@@ -104,7 +111,7 @@ module AnyView
         collection, fields = options.delete(:collection), options.delete(:fields)
         options[:options] = options_from_collection(collection, fields) if collection
         options[:options].unshift('') if options.delete(:include_blank)
-        select_options_html = options_for_select(options.delete(:options), options.delete(:selected))
+        select_options_html = options_for_select(options.delete(:options), options.delete(:selected)).join
         options.merge!(:name => "#{options[:name]}[]") if options[:multiple]
         content_tag(:select, select_options_html, options)
       end
@@ -126,6 +133,7 @@ module AnyView
       # Constructs a file field input from the given options
       # file_field_tag :photo, :class => 'long'
       def file_field_tag(name, options={})
+        @_multi_enc_type = true
         options.reverse_merge!(:name => name)
         input_tag(:file, options)
       end
@@ -174,10 +182,21 @@ module AnyView
       # 'put' and 'delete' are just specified using hidden fields with form action still 'put'.
       # hidden_form_method_field('delete') => <input name="_method" value="delete" />
       def hidden_form_method_field(desired_method)
-        return '' if (desired_method =~ /get|post/)
-        original_method = desired_method.dup
-        desired_method.replace('post')
-        hidden_field_tag(:_method, :value => original_method)
+        case desired_method
+        when :get, :GET, :POST, :post, /get/i, /post/i
+          ''
+        else
+          hidden_field_tag(:_method, :value => desired_method)
+        end
+      end
+
+      def real_method_for_fake(desired_method)
+        case desired_method
+        when :get, :GET, :delete, :DELETE, /get/i, /delete/i
+          'get'
+        else
+          'post'
+        end
       end
 
       # Returns the FormBuilder class to use based on all available setting sources

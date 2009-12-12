@@ -2,12 +2,6 @@ require File.dirname(__FILE__) + '/helper'
 require File.dirname(__FILE__) + '/fixtures/markup_app/app'
 
 class TestFormBuilder < Test::Unit::TestCase
-  include Padrino::Helpers::FormHelpers
-
-  def app
-    MarkupDemo.tap { |app| app.set :environment, :test }
-  end
-
   def setup
     error_stub = stub(:full_messages => ["1", "2"], :none? => false)
     role_types = [stub(:name => 'Admin', :id => 1), stub(:name => 'Moderate', :id => 2),  stub(:name => 'Limited', :id => 3)]
@@ -17,31 +11,31 @@ class TestFormBuilder < Test::Unit::TestCase
   end
 
   def standard_builder(object=@user)
-    Padrino::Helpers::FormBuilder::StandardFormBuilder.new(self, object)
+    AnyView::Helpers::FormBuilder::StandardFormBuilder.new(self, object)
   end
 
   context 'for #form_for method' do
     should "display correct form html" do
-      actual_html = form_for(@user, '/register', :id => 'register', :method => 'post') { "Demo" }
+      actual_html = view_context.form_for(@user, '/register', :id => 'register', :method => 'post') { "Demo" }
       assert_has_tag('form', :action => '/register', :id => 'register', :method => 'post', :content => "Demo") { actual_html }
       assert_has_tag('form input[type=hidden]', :name => '_method', :count => 0) { actual_html } # no method action field
     end
 
     should "display correct form html with fake object" do
-      actual_html = form_for(:markup_user, '/register', :id => 'register', :method => 'post') { |f| f.text_field :username }
+      actual_html = view_context.form_for(:markup_user, '/register', :id => 'register', :method => 'post') { |f| f.text_field :username }
       assert_has_tag('form', :action => '/register', :id => 'register', :method => 'post') { actual_html }
       assert_has_tag('form input', :type => 'text', :name => 'markup_user[username]') { actual_html }
       assert_has_tag('form input[type=hidden]', :name => '_method', :count => 0) { actual_html } # no method action field
     end
 
     should "display correct form html with method :put" do
-      actual_html = form_for(@user, '/update', :method => 'put') { "Demo" }
+      actual_html = view_context.form_for(@user, '/update', :method => 'put') { "Demo" }
       assert_has_tag('form', :action => '/update', :method => 'post') { actual_html }
       assert_has_tag('form input', :type => 'hidden', :name => "_method", :value => 'put') { actual_html }
     end
 
     should "display correct form html with method :delete" do
-      actual_html = form_for(@user, '/destroy', :method => 'delete') { "Demo" }
+      actual_html = view_context.form_for(@user, '/destroy', :method => 'delete') { "Demo" }
       assert_has_tag('form', :action => '/destroy', :method => 'post') { actual_html }
       assert_has_tag('form input', :type => 'hidden', :name => "_method", :value => 'delete') { actual_html }
     end

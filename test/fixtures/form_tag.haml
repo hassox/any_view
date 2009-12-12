@@ -20,10 +20,10 @@
   - field_set_tag "Advanced", :class => 'advanced-field-set' do
     %p
       = label_tag :username, :class => 'first', :caption => "Nickname"
-      = text_field_tag :username, :value => params[:username], :id => 'the_username'
+      = text_field_tag :username, :value => 'username', :id => 'the_username'
     %p
       = label_tag :password, :class => 'first'
-      = password_field_tag :password, :value => params[:password]
+      = password_field_tag :password, :value => 'password'
     %p
       = label_tag :about, :class => 'about', :caption => "About Me"
       = text_area_tag :about, :class => 'large'

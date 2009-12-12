@@ -16,17 +16,17 @@
   <% end %>
 <% end %>
 
-<% form_tag '/advanced', :id => 'advanced', :class => 'advanced-form', :method => 'get' do %>
+<% form_tag '/advanced', :id => 'advanced', :class => 'advanced-form', :method => :put do %>
   <%= error_messages_for MarkupUser.new, :header_message => "There are problems with saving user!" %>
   <%= hidden_field_tag :session_id, :value => "__secret__" %>
   <% field_set_tag "Advanced", :class => 'advanced-field-set' do %>
     <p>
       <%= label_tag :username, :class => 'first', :caption => "Nickname" %>
-      <%= text_field_tag :username, :value => params[:username], :id => 'the_username' %>
+      <%= text_field_tag :username, :value => 'username', :id => 'the_username' %>
     </p>
     <p>
-      <%= label_tag :password, :class => 'first' %> 
-      <%= password_field_tag :password, :value => params[:password] %>
+      <%= label_tag :password, :class => 'first' %>
+      <%= password_field_tag :password, :value => 'password'%>
     </p>
     <p>
       <%= label_tag :about, :class => 'about', :caption => "About Me" %>

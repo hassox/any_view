@@ -1,0 +1,12 @@
+<% form_tag "/explicit", :multipart => true, :class => "explicit" do %>
+  <p>Here</p>
+<% end %>
+
+<% form_tag "/implicit", :class => "implicit" do %>
+  <%= file_field_tag :foo %>
+<% end %>
+
+<% form_tag "/no_file", :class => "no_file" do %>
+  <p>No file to see here</p>
+<% end %>
+
