@@ -5,12 +5,16 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "any_view"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{View helpers designed to work just about anywhere}
+    gem.description = %Q{View helpers with an absolute minimum of requirements}
     gem.email = "has.sox@gmail.com"
     gem.homepage = "http://github.com/hassox/any_view"
     gem.authors = ["Daniel Neighman"]
     gem.add_development_dependency "thoughtbot-shoulda", ">= 0"
+    gem.add_development_dependency "haml",          ">= 2.2.1"
+    gem.add_development_dependency "shoulda",       ">= 0"
+    gem.add_development_dependency "rack-test",     ">= 0.5.0"
+    gem.add_development_dependency "webrat",        ">= 0.5.1"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
   Jeweler::GemcutterTasks.new
