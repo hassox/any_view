@@ -1,5 +1,6 @@
 require 'dirge'
 require ~'./any_view/core_ext/array'
+require ~'./any_view/core_ext/hash'
 
 module AnyView
   autoload :TiltBase,         ~'./any_view/tilt_base'
@@ -7,6 +8,7 @@ module AnyView
   module Helpers
     autoload :TagHelpers,      ~'./any_view/tag_helpers'
     autoload :AssetTagHelpers, ~'./any_view/asset_tag_helpers'
+    autoload :FormatHelpers,   ~'./any_view/format_helpers'
     autoload :FormHelpers,     ~'./any_view/form_helpers'
   end
 
@@ -18,7 +20,7 @@ module AnyView
   def self.included(base)
     ah = AnyView::Helpers
     base.class_eval do
-      include ah::TagHelpers, ah::AssetTagHelpers, ah::FormHelpers
+      include ah::TagHelpers, ah::AssetTagHelpers, ah::FormHelpers, ah::FormatHelpers
     end
   end
 end

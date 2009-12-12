@@ -10,9 +10,11 @@ module AnyView
       end
 
       # Creates an html tag with given name, content and options
-      # content_tag(:p, "hello", :class => 'light')
-      # content_tag(:p, :class => 'dark') do ... end
+      # @example
+      #   content_tag(:p, "hello", :class => 'light')
+      #   content_tag(:p, :class => 'dark') do ... end
       # parameters: content_tag(name, content=nil, options={}, &block)
+      # Writes directly to the buffer
       def content_tag(*args, &block)
         name = args.first
         options = args.extract_options!
@@ -22,8 +24,10 @@ module AnyView
       end
 
       # Creates an html tag with the given name and options
-      # tag(:br, :style => 'clear:both')
-      # tag(:p, :content => "hello", :class => 'large')
+      # @example
+      #   tag(:br, :style => 'clear:both')
+      #   tag(:p, :content => "hello", :class => 'large')
+      # @return a string
       def tag(name, options={})
         content, open_tag = options.delete(:content), options.delete(:open)
         identity_tag_attributes.each { |attr| options[attr] = attr.to_s if options[attr]  }
