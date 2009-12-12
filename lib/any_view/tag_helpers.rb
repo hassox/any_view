@@ -20,7 +20,7 @@ module AnyView
         options = args.extract_options!
         tag_html = block_given? ? capture_content(options, &block) : args[1]
         tag_result = tag(name, options.merge(:content => tag_html))
-        concat_content(tag_result)
+        block.nil? ? tag_result : concat_content(tag_result)
       end
 
       # Creates an html tag with the given name and options
