@@ -1,43 +1,33 @@
 module AnyView
   module Helpers
     module AssetTagHelpers
-
-      # Creates a div to display the flash of given type if it exists
-      # flash_tag(:notice, :class => 'flash', :id => 'flash-notice')
-      def flash_tag(kind, options={})
-        flash_text = flash[kind]
-        return '' if flash_text.blank?
-        options.reverse_merge!(:class => 'flash')
-        content_tag(:div, flash_text, options)
-      end
+      MAIL_ATTRIBUTES = [:cc, :bcc, :subject, :body]
 
       # Creates a link element with given name, url and options
+      # link_to("/url", :class => "foo"){ "link text" }
       # link_to 'click me', '/dashboard', :class => 'linky'
-      # link_to('/dashboard', :class => 'blocky') do ... end
-      # parameters: name, url='javascript:void(0)', options={}, &block
       def link_to(*args, &block)
         options = args.extract_options!
-        if block_given?
-          url = args[0] || 'javascript:void(0);'
-          options.reverse_merge!(:href => url)
-          link_content = capture_html(&block)
-          result_link = content_tag(:a, link_content, options)
-          block_is_template?(block) ? concat_content(result_link) : result_link
-        else
-          name, url = args[0], (args[1] || 'javascript:void(0);')
-          options.reverse_merge!(:href => url)
-          content_tag(:a, name, options)
+        text, url = args
+        if url.nil?
+          url = text
+          text = capture_content(&block)
         end
+        options.reverse_merge!(:href => url)
+        options[:content] = text
+        result = tag(:a, options)
+        block.nil? ? result : concat_content(result)
       end
 
       # Creates a mail link element with given name and caption
       # mail_to "me@demo.com"             => <a href="mailto:me@demo.com">me@demo.com</a>
       # mail_to "me@demo.com", "My Email" => <a href="mailto:me@demo.com">My Email</a>
-      def mail_to(email, caption=nil, mail_options={})
-        html_options = mail_options.slice!(:cc, :bcc, :subject, :body)
+      def mail_to(email, caption=nil, options={})
+        mail_options, options = options.partition{|k,v| MAIL_ATTRIBUTES.include?(k)}
+        mail_options, options = Hash[mail_options], Hash[options]
         mail_query = Rack::Utils.build_query(mail_options).gsub(/\+/, '%20').gsub('%40', '@')
         mail_href = "mailto:#{email}"; mail_href << "?#{mail_query}" if mail_query.present?
-        link_to (caption || email), mail_href, html_options
+        link_to (caption || email), mail_href, options
       end
 
       # Creates an image element with given url and options
@@ -105,7 +95,7 @@ module AnyView
       # Returns the uri root of the application, defaulting to '/'
       # @example uri_root('javascripts')
       def uri_root_path(*paths)
-        root_uri = self.class.uri_root if self.class.respond_to?(:uri_root)
+        root_uri = uri_root if self.respond_to?(:uri_root)
         File.join(root_uri || '/', *paths)
       end
     end
