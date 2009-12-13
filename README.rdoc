@@ -31,6 +31,8 @@ If you're using Tilt, then AnyView can provide the capture_content and concat_co
 
 A full setup for a custom class, including rendering the tilt templates might look like this:
 
+  require 'dirge' # nice relative paths with ~
+
   class Renderer
     def self.path
       @path ||= File.expand_path(~'./views')
