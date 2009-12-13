@@ -1,6 +1,6 @@
-= any_view
+= AnyView
 
-The AnyView gem provides helpers for common web related view rendering.  The anyView gem is a collection of mixins that work together to provide tags, forms asset paths and more.  AnyView is based hevily on the Padrino framework helpers module.
+The AnyView gem provides helpers for common web related view rendering.  The AnyView gem is a collection of mixins that work together to provide tags, forms asset paths and more.  AnyView is based heavily on the Padrino framework helpers module.
 
 The requirements of AnyView are kept very small.  There's two required methods inside your view context.
 
