@@ -51,12 +51,13 @@ module AnyView
     concat_methods[ ::Tilt::ERBTemplate   ] = :_erb_concat
     concat_methods[ ::Tilt::ErubisTemplate] = :_erb_concat
 
-    def capture_content(opts = {}, &blk)
+    def capture_content(*args, &blk)
+      opts = args.extract_options!
       opts[:template_type]  ||= template_type
       capture_method = AnyView::TiltBase.capture_method_for(opts[:template_type])
 
       raise CaptureMethodNotFound, "Capture Method not found for Template Type: #{opts[:template_type].inspect}" unless capture_method
-      send(capture_method, blk)
+      send(capture_method, *args, &blk)
     end
 
     def concat_content(string, opts = {})
@@ -67,15 +68,15 @@ module AnyView
       send(concat_method, string)
     end
 
-    def _haml_capture(block)
+    def _haml_capture(*args, &block)
       with_haml_buffer Haml::Buffer.new(nil, :encoding => "UTF-8") do
-        capture_haml(&block)
+        capture_haml(*args, &block)
       end
     end
 
-    def _erb_capture(block)
+    def _erb_capture(*args, &block)
       _out_buf, @_out_buf = @_out_buf, ""
-      block.call
+      block.call(*args)
       ret = @_out_buf
       @_out_buf = _out_buf
       ret

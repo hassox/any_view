@@ -15,7 +15,7 @@ module AnyView
             label_options.reverse_merge!(:caption => options.delete(:caption)) if options[:caption]
             field_html = label(field, label_options)
             field_html << #{field_type}(field, options)
-            @template.content_tag(:p, field_html)
+            @view_context.content_tag(:p, field_html)
           end
           EOF
         end
@@ -23,13 +23,13 @@ module AnyView
         # submit_block("Update")
         def submit_block(caption, options={})
           submit_html = self.submit(caption, options)
-          @template.content_tag(:p, submit_html)
+          @view_context.content_tag(:p, submit_html)
         end
 
         # image_submit_block("submit.png")
         def image_submit_block(source, options={})
           submit_html = self.image_submit(source, options)
-          @template.content_tag(:p, submit_html)
+          @view_context.content_tag(:p, submit_html)
         end
       end
     end

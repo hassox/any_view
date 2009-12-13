@@ -102,6 +102,7 @@ class MarkupUser
   def session_id; 45; end
   def gender; 'male'; end
   def remember_me; '1'; end
+  def image; end
   def permission; Permission.new; end
 end
 

@@ -2,12 +2,11 @@ module AnyView
   module Helpers
     module FormHelpers
       # Constructs a form for object using given or default form_builder
-      # form_for :user, '/register' do |f| ... end
       # form_for @user, '/register', :id => 'register' do |f| ... end
       def form_for(object, url, settings={}, &block)
         builder_class = configured_form_builder_class(settings[:builder])
-        form_html = capture_content(builder_class.new(self, object), &block)
-        form_tag(url, settings) { form_html }
+        settings[:builder] = builder_class.new(self, object)
+        form_tag(url, settings, &block)
       end
 
       # Constructs form fields for an object using given or default form_builder
@@ -29,7 +28,14 @@ module AnyView
         fake_method = hidden_form_method_field(options[:method])
         real_method = real_method_for_fake(options[:method])
         options[:method] = real_method
-        inner_form_html = fake_method.to_s + capture_content(&block)
+        builder = options.delete(:builder)
+
+        inner_form_html = fake_method.to_s
+        inner_form_html += if builder
+                              capture_content(builder, &block)
+                           else
+                             capture_content(&block)
+                           end
 
         options[:enctype] = "multipart/form-data" if @_multi_enc_type
         @_multi_enc_type = nil
@@ -63,7 +69,7 @@ module AnyView
       # label_tag :username, :class => 'long-label'
       # label_tag :username, :class => 'long-label' do ... end
       def label_tag(name, options={}, &block)
-        options.reverse_merge!(:caption => name.to_s.gsub(/\b('?[a-z])/){ $1.upcase}, :for => name)
+        options.reverse_merge!(:caption => name.to_s.titleize, :for => name)
         caption_text = options.delete(:caption) + ": "
         if block_given? # label with inner content
           label_content = caption_text + capture_content(&block)
@@ -204,9 +210,7 @@ module AnyView
       # configured_form_builder_class(nil) => StandardFormBuilder
       def configured_form_builder_class(explicit_builder=nil)
         default_builder = self.respond_to?(:options) && self.options.default_builder
-        configured_builder = explicit_builder || default_builder || 'StandardFormBuilder'
-        configured_builder = "AnyView::Helpers::FormBuilder::#{configured_builder}".constantize if configured_builder.is_a?(String)
-        configured_builder
+        explicit_builder || default_builder || FormBuilder::StandardFormBuilder
       end
     end
   end
