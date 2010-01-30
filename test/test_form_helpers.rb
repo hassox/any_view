@@ -390,6 +390,11 @@ class TestFormHelpers < Test::Unit::TestCase
       assert_has_selector('select option', :content => 'orange', :value => '2', :selected => 'selected'){result}
       assert_has_selector('select option', :content => 'purple', :value => '3'){result}
     end
+
+    should "handle empty collections" do
+      actual_html = view_context.select_tag(:empty, :collection => [], :fields => [:foo, :bar])
+      assert_has_tag(:select, :name => 'empty') { actual_html }
+    end
   end
 
   context 'for #submit_tag method' do
