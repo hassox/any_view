@@ -69,16 +69,16 @@ module AnyView
     end
 
     def _haml_capture(*args, &block)
-      with_haml_buffer Haml::Buffer.new(nil, :encoding => "UTF-8") do
+      with_haml_buffer(Haml::Buffer.new(nil, :encoding => "UTF-8")) do
         capture_haml(*args, &block)
       end
     end
 
     def _erb_capture(*args, &block)
-      _out_buf, @_out_buf = @_out_buf, ""
+      _saved_buffer, @_out_buf = @_out_buf, ''
       block.call(*args)
       ret = @_out_buf
-      @_out_buf = _out_buf
+      @_out_buf = _saved_buffer
       ret
     end
 

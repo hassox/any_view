@@ -1,20 +1,23 @@
-require 'dirge'
-require ~'./any_view/core_ext/string'
-require ~'./any_view/core_ext/hash'
-require ~'./any_view/core_ext/array'
+require 'any_view/core_ext/string'
+require 'any_view/core_ext/hash'
+require 'any_view/core_ext/array'
+require 'tilt'
+
+Tilt::ERBTemplate.expose_buffer!
+Tilt::ErubisTemplate.expose_buffer!
 
 module AnyView
-  autoload :TiltBase,         ~'./any_view/tilt_base'
+  autoload :TiltBase,         'any_view/tilt_base'
 
   module Helpers
-    autoload :TagHelpers,      ~'./any_view/tag_helpers'
-    autoload :AssetTagHelpers, ~'./any_view/asset_tag_helpers'
-    autoload :FormatHelpers,   ~'./any_view/format_helpers'
-    autoload :FormHelpers,     ~'./any_view/form_helpers'
+    autoload :TagHelpers,      'any_view/tag_helpers'
+    autoload :AssetTagHelpers, 'any_view/asset_tag_helpers'
+    autoload :FormatHelpers,   'any_view/format_helpers'
+    autoload :FormHelpers,     'any_view/form_helpers'
 
     module FormBuilder
-      autoload :AbstractFormBuilder,  ~'./any_view/form_builder/abstract_form_builder'
-      autoload :StandardFormBuilder,  ~'./any_view/form_builder/standard_form_builder'
+      autoload :AbstractFormBuilder,  'any_view/form_builder/abstract_form_builder'
+      autoload :StandardFormBuilder,  'any_view/form_builder/standard_form_builder'
     end
   end
 

@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/helper'
+require File.join(File.expand_path(File.dirname(__FILE__)), '/helper')
 
 class TestFormatHelpers < Test::Unit::TestCase
 

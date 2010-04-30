@@ -15,7 +15,7 @@ class Renderer
   end
 
   def self.path
-    @path ||= File.expand_path(~'./fixtures')
+    @path ||= File.join(File.expand_path(File.dirname(__FILE__)), './fixtures')
   end
 
   def self.template(name)
