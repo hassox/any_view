@@ -3,9 +3,6 @@ require 'any_view/core_ext/hash'
 require 'any_view/core_ext/array'
 require 'tilt'
 
-Tilt::ERBTemplate.expose_buffer!
-Tilt::ErubisTemplate.expose_buffer!
-
 module AnyView
   autoload :TiltBase,         'any_view/tilt_base'
 

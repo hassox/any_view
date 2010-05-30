@@ -1,9 +1,11 @@
 # A sample Gemfile
-source :gemcutter
+source :rubygems
 #
-gem 'tilt', :path => '/Users/dneighman/Projects/tilt'
+gem 'tilt', '>=0.10'
+gem 'ruby-debug'
 
 group(:test) do
+  gem 'rake'
   gem 'shoulda'
   gem 'haml'
   gem 'mocha'
