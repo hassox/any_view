@@ -1,65 +1,43 @@
 --- 
-dependencies: 
-  ruby-debug: 
-    group: 
-    - :default
-    version: ">= 0"
-  rake: 
-    group: 
-    - :test
-    version: ">= 0"
-  haml: 
-    group: 
-    - :test
-    version: ">= 0"
-  shoulda: 
-    group: 
-    - :test
-    version: ">= 0"
-  webrat: 
-    group: 
-    - :test
-    version: ">= 0.5.1"
-  mocha: 
-    group: 
-    - :test
-    version: ">= 0"
-  rack-test: 
-    group: 
-    - :test
-    version: ">= 0.5.0"
-  tilt: 
-    group: 
-    - :default
-    version: ">= 0.10"
+hash: bef8e852cae66c8d87e0f29efe0f8f7d8940ed9d
+sources: 
+- Rubygems: 
+    uri: http://gemcutter.org
 specs: 
 - rake: 
     version: 0.8.7
-- columnize: 
-    version: 0.3.1
 - haml: 
     version: 3.0.6
-- linecache: 
-    version: "0.43"
 - mocha: 
     version: 0.9.8
 - nokogiri: 
     version: 1.4.2
 - rack: 
-    version: 1.1.0
+    version: 1.2.0
 - rack-test: 
-    version: 0.5.4
-- ruby-debug-base: 
-    version: 0.10.3
-- ruby-debug: 
-    version: 0.10.3
-- shoulda: 
-    version: 2.10.3
+    version: 0.5.0
 - tilt: 
     version: "0.10"
 - webrat: 
-    version: 0.7.1
-hash: 222d100eafdd1bedcc1dbf146390e500b794cd75
-sources: 
-- Rubygems: 
-    uri: http://gemcutter.org
+    version: 0.5.1
+dependencies: 
+  tilt: 
+    version: = 0.10
+    group: 
+    - :default
+  haml: 
+    version: = 3.0.6
+    group: 
+    - :test
+  mocha: 
+    version: = 0.9.8
+    group: 
+    - :test
+  rack-test: 
+    version: = 0.5.0
+    group: 
+    - :test
+  webrat: 
+    version: = 0.5.1
+    group: 
+    - :test
