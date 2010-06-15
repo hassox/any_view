@@ -1,5 +1,5 @@
 --- 
-hash: bef8e852cae66c8d87e0f29efe0f8f7d8940ed9d
+hash: 38900315740c8f66e1de6fa1185a82964c504577
 sources: 
 - Rubygems: 
     uri: http://gemcutter.org
@@ -7,37 +7,43 @@ specs:
 - rake: 
     version: 0.8.7
 - haml: 
-    version: 3.0.6
+    version: 3.0.12
 - mocha: 
     version: 0.9.8
 - nokogiri: 
     version: 1.4.2
 - rack: 
-    version: 1.2.0
+    version: 1.2.1
 - rack-test: 
-    version: 0.5.0
+    version: 0.5.4
+- shoulda: 
+    version: 2.11.0
 - tilt: 
-    version: "0.10"
+    version: 1.0.1
 - webrat: 
-    version: 0.5.1
+    version: 0.7.1
 dependencies: 
   tilt: 
-    version: = 0.10
+    version: ">= 1"
     group: 
     - :default
   haml: 
-    version: = 3.0.6
+    version: ~> 3.0
     group: 
     - :test
   mocha: 
-    version: = 0.9.8
+    version: ~> 0.9
     group: 
     - :test
   rack-test: 
-    version: = 0.5.0
+    version: ~> 0.5
     group: 
     - :test
   webrat: 
-    version: = 0.5.1
+    version: ~> 0.5
+    group: 
+    - :test
+  shoulda: 
+    version: ">= 0"
     group: 
     - :test
